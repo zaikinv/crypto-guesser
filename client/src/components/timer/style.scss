@@ -1,0 +1,40 @@
+
+.timer-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.2rem;
+  position: relative;
+  width: 300px;
+}
+
+.progress-border {
+  width: 100%;
+  border: 1px solid rgb(0 0 0);
+  height: 20px;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: black;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.label {
+  margin-top: 1rem;
+}
+
+.random-fact {
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: center;
+}

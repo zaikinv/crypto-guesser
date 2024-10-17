@@ -1,0 +1,16 @@
+.price-container {
+  border-radius: 8px;
+  max-width: 400px;
+  text-align: center;
+
+  &__label {}
+
+  &__price {
+    font-size: 3rem;
+  }
+
+  &__countdown {
+    font-size: 1.2rem;
+    color: gray;
+  }
+}

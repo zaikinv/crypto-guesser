@@ -1,0 +1,66 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Client Dependencies
+        run: npm ci --ignore-scripts
+        working-directory: ./client
+
+      - name: Build Client
+        run: npm run build
+        working-directory: ./client
+
+      - name: Install Server Dependencies
+        run: npm ci --ignore-scripts
+        working-directory: ./server
+
+      - name: Build Server
+        run: npm run build
+        working-directory: ./server
+
+      - name: Run Unit Tests (FE)
+        run: npm run test:unit
+        working-directory: ./client
+
+      - name: Run Unit Tests (BE)
+        run: npm run test:unit
+        working-directory: ./server
+
+      - name: Combine Client and Server
+        run: |
+          mkdir -p ./server/dist/public
+          cp -r ./client/dist/* ./server/dist/public/
+        working-directory: .
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{secrets.AWS_REGION}}
+
+      - name: Install Elastic Beanstalk CLI
+        run: |
+          sudo apt-get install -y python3-pip
+          pip3 install awsebcli --upgrade --user
+          echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.bashrc
+          source $HOME/.bashrc
+
+      - name: Init Elastic Beanstalk
+        run: echo "n" | eb init crypto-guesser --region ${{secrets.AWS_REGION}}
+        working-directory: ./server
+
+      - name: Deploy to Elastic Beanstalk
+        run: eb deploy crypto-guesser-env
+        working-directory: ./server

@@ -1,0 +1,30 @@
+$desktop-breakpoint: 1024px;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100dvh - 2rem);
+  margin: auto;
+  max-width: 1280px;
+  padding: 1rem;
+
+  @media (min-width: $desktop-breakpoint) {
+    padding: 2rem;
+    height: calc(100dvh - 4rem);
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.footer {
+  box-sizing: border-box;
+  width: 100%;
+}

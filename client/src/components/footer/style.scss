@@ -1,0 +1,10 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  width: 100%;
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
