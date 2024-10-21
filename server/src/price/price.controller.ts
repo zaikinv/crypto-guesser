@@ -25,7 +25,7 @@ export class PriceController {
       const price = await this.priceService.getCurrentBTCPrice();
       res.status(HttpStatus.OK).json({ price });
     } catch (error) {
-      console.error('Error fetching price', error.message);
+      console.log('Error fetching price', error.message);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ error: 'Error fetching price' });

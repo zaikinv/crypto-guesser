@@ -6,6 +6,14 @@ import { appConfig } from '../config';
 
 jest.mock('axios');
 
+jest.mock('../config', () => ({
+  appConfig: {
+    priceApiBaseUrl: 'https://api.binance.com/api/v3',
+    guessTimeout: 1,
+    symbol: 'BTCUSDT',
+  },
+}));
+
 describe('PriceService', () => {
   let priceService: PriceService;
 
@@ -42,7 +50,7 @@ describe('PriceService', () => {
 
       await expect(priceService.getCurrentBTCPrice()).rejects.toThrow(
         new HttpException(
-          'Error fetching BTC price',
+          'Error fetching price',
           HttpStatus.INTERNAL_SERVER_ERROR,
         ),
       );

@@ -22,7 +22,7 @@ export class UsersRepository {
       const result = await this.dynamoDb.send(new GetCommand(params));
       return result.Item ? (result.Item as User) : null;
     } catch (error) {
-      console.error(`Error fetching user score for userId: ${userId}`, error);
+      console.log(`Error fetching user score for userId: ${userId}`, error);
       throw new Error('Unable to fetch user score');
     }
   }
@@ -43,7 +43,7 @@ export class UsersRepository {
       await this.dynamoDb.send(new PutCommand(params));
       return user;
     } catch (error) {
-      console.error('Error creating user in DynamoDB:', error);
+      console.log('Error creating user in DynamoDB:', error);
       throw new Error('Unable to create user');
     }
   }
@@ -67,7 +67,7 @@ export class UsersRepository {
       const result = await this.dynamoDb.send(new UpdateCommand(params));
       return result.Attributes as User;
     } catch (error) {
-      console.error(`Error updating user score for userId: ${userId}`, error);
+      console.log(`Error updating user score for userId: ${userId}`, error);
       throw new Error('Unable to update user score');
     }
   }

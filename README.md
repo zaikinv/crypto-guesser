@@ -4,15 +4,29 @@
   <img src="./assets/logo.jpg" width="400"/>
   <br/>
   <br/>
+  <p align="center">
+    Guess BTC next move!
+  </p>
+  <br/>
   <br/>
 </div>
 
+## Screenshots
 
-A web app where users guess if Bitcoin's price will go higher or lower after one minute, with real-time updates and score tracking, backed by AWS.
+Mobile
+
+![](./assets/screens.png)
+
+Desktop
+
+![](./assets/screens-mac.png)
+
 
 ## Architecture overview
 
-The user is interacting with a React frontend that sends and receives data via REST API provided by NestJS backend. The backend communicates with the Binance API to retrieve real-time Bitcoin price data and with AWS DynamoDB to store and manage game-related data, such as guesses and scores.
+A web app where users guess if Bitcoin's price will go higher or lower after one minute, with real-time updates and score tracking, backed by AWS.
+
+The user is interacting with React frontend that sends and receives data via REST API provided by NestJS backend. The backend communicates with the Binance API to retrieve real-time Bitcoin price data and with AWS DynamoDB to store and manage game-related data, such as guesses and scores.
 
 ![](./assets/arch.png)
 
@@ -45,18 +59,10 @@ where `API_KEY` is a secret key that will be used to authenticate requests to th
 
 Setup the following in DynamoDB:
 
-- `Users` table with `userId` as the primary key and fields 
-  - `name`
-  - `score`
-
-- `Guesses` table with `guessId` as the primary key and fields 
-  - `userId`
-  - `timestamp`
-  - `direction` (`up` or `down`)
-  - `price`
-  - `correct` (`true` or `false`)
-  
+- `Users` table with `userId` as the primary key
+- `Guesses` table with `guessId` as the primary key
 - `UserIdIndex` index on `Guesses` table with `userId` as the partition key and `timestamp` as the sort key.
+- IAM user with `AmazonDynamoDBFullAccess` policy attached
 
 ![](./assets/aws.png)
 
@@ -77,22 +83,22 @@ cd crypto-guesser
 Install dependencies
 
 ```bash
-# run in the root directory
-cd client && npm i && cd ../server && npm i
+cd client && npm i && cd ../server && npm i && cd ..
 ```
 
 Start client & server
 
 ```bash
-# run in the root directory
 cd client && npm run start & cd ../server && npm run start
 ```
 
-Open `http://localhost:5173/` in your browser.
+...wait for client & server to startup, then open `http://localhost:5173/` (or URL indicated in your terminal in case port `5173` is in use) in your browser.
+
+🚨 Depending on your local port availability, you may need to adjust the `apiBaseUrl` in the `client/src/config.ts` file. See [Configuration](#configuration) section for more details.
 
 ## API Documentation (Swagger)
 
-http://crypto-guesser.eu-central-1.elasticbeanstalk.com/api-docs
+https://d32hsgqukl039n.cloudfront.net/api-docs
 
 or `http://localhost:5173/api-docs` if running locally.
 
@@ -100,7 +106,7 @@ or `http://localhost:5173/api-docs` if running locally.
 
 ### Frontend
 
-See the `client/src/config.ts` file for the application configuration. 
+See the `client/src/config.ts` file for the application configuration.
 
 ```javascript
 const appConfig = {
@@ -117,13 +123,16 @@ See the `server/src/config.ts` file for the application configuration.
 ```javascript
 const appConfig = {
   priceApiBaseUrl: 'https://api.binance.com/api/v3',
-  guessTimeout: 60
+  guessTimeout: 60,
+  symbol: 'BTCUSDT',
 }
 ```
 
 ## Deployment
 
-The GitHub Action triggers upon a code push. The pipeline is installing dependencies, building the code, running tests, and compressing the final artifacts. Once the build process is complete, the pipeline deploys both the React frontend and NestJS backend as containerized applications into an Elastic Beanstalk environment, where they run within a managed container.
+[Deploy on AWS](https://github.com/zaikinv/crypto-guesser/actions/workflows/main.yml)
+
+The GitHub Action has to be manually triggered. The pipeline is installing dependencies, building the codeand running the tests. Once the build process is complete, the pipeline deploys both the React frontend and NestJS backend as containerized applications into an Elastic Beanstalk environment.
 
 ![](./assets/deployment.png)
 
@@ -134,49 +143,36 @@ The GitHub Action triggers upon a code push. The pipeline is installing dependen
 #### Frontend
 
 ```bash
-cd client
-npm run test:unit
+cd client && npm run test:unit
 ```
 
 #### Backend
 
 ```bash
-cd server
-npm run test:unit
+cd server && npm run test:unit
 ```
 
 ### E2E
 
 #### Frontend
 
-##### Headless mode
-
-Playwright installation is required. Check [Prerequisites](#prerequisites) before running.
+🚨 Make sure the backend is running before running E2E tests and if not, run `cd server && npm run start` first.
 
 ```bash
-cd client
-npm run test:e2e
+cd client && npm run test:e2e
 ```
 
-##### UI mode
-
-Playwright installation is required. Check [Prerequisites](#prerequisites) before running.
-
-```bash
-cd client
-npm run test:e2e-ui
-```
+You can also run E2E tests in Playwright UI by running `cd client && npm run test:e2e-ui`.
 
 #### Backend
 
 ```bash
-cd server
-npm run test:e2e
+cd server && npm run test:e2e
 ```
 
 ### Known limitations
 
 - After 60 seconds the price might not change, which will result in a draw (logic: the guess can be either UP or DOWN, but in this case it is neither UP nor DOWN)
 - Unit and E2E tests are not covering all the codebase, but only the most critical parts
-- E2E tests are intentionally excluded from the pipeline due to the time constraints and still can be run locally
+- E2E tests are intentionally excluded from the pipeline due to the time & resources constraints and still can be run locally
 - Nest build doesn't work well within npm workspace and requires an own standalone package unless Nest custom [monorepo](https://docs.nestjs.com/cli/monorepo) is used.

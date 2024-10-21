@@ -4,7 +4,7 @@ import { appConfig } from '../config';
 
 @Injectable()
 export class PriceService {
-  private readonly symbol = 'BTCUSDT';
+  private readonly symbol = appConfig.symbol;
 
   async getCurrentBTCPrice(): Promise<number> {
     try {
@@ -18,9 +18,9 @@ export class PriceService {
       );
       return parseFloat(response.data.price);
     } catch (error) {
-      console.error(`Error fetching BTC price: ${error.message}`);
+      console.log(`Error fetching price: ${error.message}`);
       throw new HttpException(
-        'Error fetching BTC price',
+        'Error fetching price',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

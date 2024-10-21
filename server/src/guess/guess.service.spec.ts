@@ -10,6 +10,7 @@ jest.mock('../config', () => ({
   appConfig: {
     priceApiBaseUrl: 'https://api.binance.com/api/v3',
     guessTimeout: 1,
+    symbol: 'BTCUSDT',
   },
 }));
 

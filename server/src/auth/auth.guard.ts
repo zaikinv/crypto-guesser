@@ -20,12 +20,12 @@ export class AuthGuard implements CanActivate {
     const apiKey = request.headers['x-api-key'];
 
     if (!apiKey) {
-      console.error('[ApiKeyGuard] API key is missing.');
+      console.log('[ApiKeyGuard] API key is missing.');
       throw new UnauthorizedException('API key is missing.');
     }
 
     if (apiKey !== process.env.API_KEY) {
-      console.error('[ApiKeyGuard] Invalid API key.');
+      console.log('[ApiKeyGuard] Invalid API key.');
       throw new UnauthorizedException('Invalid API key.');
     }
 

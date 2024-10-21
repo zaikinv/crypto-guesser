@@ -48,7 +48,7 @@ export class UsersController {
       }
       res.status(HttpStatus.OK).json({ score: user.score });
     } catch (error) {
-      console.error('Error fetching user score', error.message);
+      console.log('Error fetching user score', error.message);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ error: 'Error fetching score' });
@@ -89,7 +89,7 @@ export class UsersController {
         score: newUser.score,
       });
     } catch (error) {
-      console.error('Error creating user', error.message);
+      console.log('Error creating user', error.message);
       res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ error: 'Error creating user' });
