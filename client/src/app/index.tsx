@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import { setScore, setUserId, setUserName, setActiveGuess } from '../store';
 import { getScore, getActiveGuess } from '../api';
+import { Error } from '../components/error';
 
 const isLocalEnv = process.env.NODE_ENV !== 'production';
 
@@ -17,6 +18,7 @@ export const App = () => {
         const apiKey = localStorage.getItem('apiKey');
         return apiKey ? redirect('/game') : redirect('/login');
       },
+      errorElement: <Error />,
     },
     {
       path: '/login',
@@ -36,6 +38,7 @@ export const App = () => {
         const { Login } = await import('./routes/login');
         return { Component: Login };
       },
+      errorElement: <Error />,
     },
     {
       path: '/game',
@@ -63,10 +66,12 @@ export const App = () => {
         const { Game } = await import('./routes/game');
         return { Component: Game };
       },
+      errorElement: <Error />,
     },
     {
       path: '*',
       loader: () => redirect('/'),
+      errorElement: <Error />,
     },
   ]);
 
