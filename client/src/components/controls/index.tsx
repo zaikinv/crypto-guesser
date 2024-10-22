@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import './style.scss';
 import { DIRECTION } from '../../types';
+import './style.scss';
 
 interface ControlProps {
   handleGuess: (guess: DIRECTION) => void;

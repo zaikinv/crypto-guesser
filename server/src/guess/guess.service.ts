@@ -24,6 +24,7 @@ export class GuessService {
     if (activeGuess) {
       const timeElapsed = Date.now() - activeGuess.timestamp;
       if (timeElapsed > appConfig.guessTimeout) {
+        // when submitting a new guess after the timeout, delete the old guess
         await this.guessRepository.deleteGuess(userId);
       } else {
         throw new HttpException(
@@ -68,6 +69,12 @@ export class GuessService {
     return activeGuess;
   }
 
+  // Transactional function to resolve the guess
+  // 1. Check if the guess is expired
+  // 2. Get the current price
+  // 3. Update the guess with the result
+  // 4. Update the user score
+  // 5. Delete the guess
   private async resolveGuess(activeGuess: Guess) {
     const { userId, guessId, price, direction, timestamp } = activeGuess;
 

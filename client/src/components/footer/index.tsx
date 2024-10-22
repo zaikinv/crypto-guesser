@@ -1,6 +1,6 @@
 import { FC, MouseEvent, useState } from 'react';
-import './style.scss';
 import { Rules } from '../rules';
+import './style.scss';
 
 export const Footer: FC = () => {
   const [showRules, setShowRules] = useState(false);

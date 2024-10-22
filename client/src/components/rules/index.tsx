@@ -7,7 +7,7 @@ interface RulesProps {
 
 export const Rules: FC<RulesProps> = ({ onContinue }) => {
   return (
-    <div className="modal-overlay" data-testid="game-rules">
+    <div className="rules-modal-overlay" data-testid="game-rules">
       <div className="rules-container">
         <h3>Game Rules</h3>
         <ul>

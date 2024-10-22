@@ -1,8 +1,8 @@
 import { user, score as activeScore } from '../../store';
 import { useNavigate } from 'react-router-dom';
-import './style.scss';
 import { logout } from '../../services/user';
 import logo from '../../assets/logo.png';
+import './style.scss';
 
 export const Header = () => {
   const navigate = useNavigate();

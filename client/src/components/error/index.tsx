@@ -8,12 +8,13 @@ interface ErrorProps {
 export const Error: FC<ErrorProps> = ({
   message = 'An unexpected error occurred. Please try again later.',
 }) => {
+  // as the simplest way to recover from an error, we reload the page
   const handleClick = () => {
     window.location.reload();
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="error-modal-overlay">
       <div className="error-container">
         <b>Ooops, something went wrong :(</b>
         <p>{message}</p>

@@ -102,6 +102,17 @@ https://d32hsgqukl039n.cloudfront.net/api-docs
 
 or `http://localhost:5173/api-docs` if running locally.
 
+### Sequence diagrams
+
+#### Login
+
+![](./assets/login.png)
+
+### Submit and validate guess
+
+![](./assets/submit.png)
+
+
 ## Configuration
 
 ### Frontend
@@ -173,7 +184,8 @@ cd server && npm run test:e2e
 
 ### Known limitations
 
-- After 60 seconds the price might not change, which will result in a draw (logic: the guess can be either UP or DOWN, but in this case it is neither UP nor DOWN)
+- After 60 seconds the price might not change, which will result in a draw (logic in this case: the guess can be either UP or DOWN, but in this case it is neither UP nor DOWN)
+- When user submits a guess, the price that is visible is submitted to ensure fairness, the actual price at the exact moment may differ
 - Unit and E2E tests are not covering all the codebase, but only the most critical parts
 - E2E tests are intentionally excluded from the pipeline due to the time & resources constraints and still can be run locally
-- Nest build doesn't work well within npm workspace and requires an own standalone package unless Nest custom [monorepo](https://docs.nestjs.com/cli/monorepo) is used.
+- Nest build doesn't work well within npm workspace and requires an own standalone package unless Nest custom [monorepo](https://docs.nestjs.com/cli/monorepo) is used
