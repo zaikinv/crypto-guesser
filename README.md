@@ -35,36 +35,8 @@ The user is interacting with React frontend that sends and receives data via RES
 ### Needed tools
 
 - Node: v20.14.0 (_recommended_)
-- NPM: 10.8.2 (_recommended_)
+- NPM: 10.9.0 (_recommended_)
 - Playwright (run `npx playwright install`)
-
-### AWS Setup
-
-#### Option 1
-
-Set environment variables in `server/.env`file:
-
-```bash    
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_REGION=eu-central-1
-API_KEY=
-```
-
-where `API_KEY` is a secret key that will be used to authenticate requests to the backend. The value can be generate using [Random key generator](https://generate-random.org/api-key-generator), for example.
-
-🚨 Please reach out to me if you would like me to setup an AWS account for you.
-
-#### Option 2
-
-Setup the following in DynamoDB:
-
-- `Users` table with `userId` as the primary key
-- `Guesses` table with `guessId` as the primary key
-- `UserIdIndex` index on `Guesses` table with `userId` as the partition key and `timestamp` as the sort key.
-- IAM user with `AmazonDynamoDBFullAccess` policy attached
-
-![](./assets/aws.png)
 
 ## Run Locally
 
@@ -86,6 +58,8 @@ Install dependencies
 cd client && npm i && cd ../server && npm i && cd ..
 ```
 
+🚨 Set up AWS as described in the [AWS Setup](#aws-setup) section.
+
 Start client & server
 
 ```bash
@@ -95,6 +69,34 @@ cd client && npm run start & cd ../server && npm run start
 ...wait for client & server to startup, then open `http://localhost:5173/` (or URL indicated in your terminal in case port `5173` is in use) in your browser.
 
 🚨 Depending on your local port availability, you may need to adjust the `apiBaseUrl` in the `client/src/config.ts` file. See [Configuration](#configuration) section for more details.
+
+## AWS Setup
+
+### Option 1
+
+Set environment variables in `server/.env`file:
+
+```bash    
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_REGION=eu-central-1
+API_KEY=
+```
+
+where `API_KEY` is a secret key that will be used to authenticate requests to the backend. You can leave it empty while running locally.
+
+🚨 Please reach out to me if you would like me to setup an AWS account for you.
+
+### Option 2
+
+Setup the following in DynamoDB:
+
+- `Users` table with `userId` as the primary key
+- `Guesses` table with `guessId` as the primary key
+- `UserIdIndex` index on `Guesses` table with `userId` as the partition key and `timestamp` as the sort key.
+- IAM user with `AmazonDynamoDBFullAccess` policy attached
+
+![](./assets/aws.png)
 
 ## API Documentation (Swagger)
 

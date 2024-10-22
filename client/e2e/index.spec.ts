@@ -128,6 +128,8 @@ test.describe('Crypto Guesser', () => {
 
     await page.goto(`${baseURL}/game`);
 
+    await page.waitForTimeout(3000);
+
     const price = await page.locator('.price-container__price');
     const countdown = await page.locator('.price-container__countdown');
 
