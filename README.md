@@ -112,7 +112,8 @@ See the `client/src/config.ts` file for the application configuration.
 const appConfig = {
   apiBaseUrl: 'http://localhost:8080/api',
   priceChangeTimeout: 30000,
-  guessTimeout: 60
+  guessTimeout: 60,
+  currency: 'USD',
 }
 ```
 

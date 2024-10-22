@@ -5,4 +5,5 @@ export const appConfig = {
       : 'http://localhost:8080/api',
   priceChangeTimeout: 30000,
   guessTimeout: 60,
+  currency: 'USD',
 };

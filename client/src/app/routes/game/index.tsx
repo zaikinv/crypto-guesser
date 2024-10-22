@@ -3,7 +3,12 @@ import { Header } from '../../../components/header';
 import { Footer } from '../../../components/footer';
 import { Gameplay } from '../../../components/gameplay';
 import { Error as ErrorModal } from '../../../components/error';
-import { activeGuess, price, setActiveGuess, setScore } from '../../../store';
+import {
+  guess as activeGuess,
+  price as currentPrice,
+  resetActiveGuess,
+  setScore,
+} from '../../../store';
 import { DIRECTION, GuessValidationResult } from '../../../types';
 import { submitGuess, checkGuess, getScore } from '../../../api';
 
@@ -16,9 +21,9 @@ export const Game: FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const guess = activeGuess.value;
-    if (guess?.guessId) {
-      setGuessId(guess.guessId);
+    const activeGuessId = activeGuess?.value?.guessId?.value;
+    if (activeGuessId) {
+      setGuessId(activeGuessId);
       setShowTimer(true);
     }
   }, []);
@@ -34,7 +39,10 @@ export const Game: FC = () => {
 
   const handleMakeGuess = useCallback(async (guess: DIRECTION) => {
     try {
-      const { guessId } = await submitGuess(guess, price.value!);
+      const { guessId } = await submitGuess(
+        guess,
+        currentPrice.value.price.value!,
+      );
       setGuessId(guessId);
       setShowTimer(true);
     } catch (err: unknown) {
@@ -46,7 +54,7 @@ export const Game: FC = () => {
     try {
       const validationResult = await checkGuess(guessId);
       setResult(validationResult);
-      setActiveGuess(null);
+      resetActiveGuess();
       setShowTimer(false);
       await updateScore();
     } catch (err: unknown) {

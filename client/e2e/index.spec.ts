@@ -48,6 +48,7 @@ test.describe('Crypto Guesser', () => {
           apiBaseUrl,
           priceChangeTimeout: 30000,
           guessTimeout: 2,
+          currency: 'USD',
         },
       };
       await route.fulfill({

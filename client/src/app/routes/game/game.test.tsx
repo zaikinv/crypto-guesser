@@ -8,7 +8,6 @@ import {
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import { Game } from './index.tsx';
-import { price } from '../../../store';
 import { submitGuess, checkGuess, getScore } from '../../../api';
 import { DIRECTION, GuessValidationResult } from '../../../types';
 
@@ -20,9 +19,32 @@ vi.mock('js-confetti', () => {
   };
 });
 
-vi.mock('../../store', () => ({
-  score: { value: 0 },
+vi.mock('../../../store', () => ({
+  price: {
+    value: {
+      price: {
+        value: 100,
+      },
+    },
+  },
+  score: {
+    value: {
+      score: {
+        value: 0,
+      },
+    },
+  },
   setScore: vi.fn(),
+  setPrice: vi.fn(),
+  user: {
+    value: { userId: { value: '123' }, userName: { value: 'John Doe' } },
+  },
+  setUser: vi.fn(),
+  guess: {
+    value: null,
+  },
+  setActiveGuess: vi.fn(),
+  resetActiveGuess: vi.fn(),
 }));
 
 vi.mock('../../../config', () => ({
@@ -30,6 +52,7 @@ vi.mock('../../../config', () => ({
     apiBaseUrl: 'http://localhost:8080/api',
     priceChangeTimeout: 30000,
     guessTimeout: 1,
+    currency: 'USD',
   },
 }));
 
@@ -56,7 +79,6 @@ describe('Game', () => {
   });
 
   it('handles making a guess', async () => {
-    price.value = 100;
     const mockGuessId = 'guess123';
     // @ts-expect-error Cannot find namespace 'vi' glitch
     (submitGuess as vi.Mock).mockResolvedValue({ guessId: mockGuessId });

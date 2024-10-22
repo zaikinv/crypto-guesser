@@ -1,69 +1,92 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import {
-  userId,
-  userName,
-  price,
+  user,
   score,
-  activeGuess,
-  setUserId,
-  setUserName,
+  price,
+  guess,
+  setUser,
+  setPrice,
   setScore,
-  setCurrentPrice,
   setActiveGuess,
 } from './index';
-import { ActiveGuess, DIRECTION } from '../types';
+import { DIRECTION } from '../types';
 
-describe('User Store', () => {
-  beforeEach(() => {
-    setUserId(null);
-    setUserName(null);
-    setScore(0);
-    setCurrentPrice(0);
-    setActiveGuess(null);
+describe('Store', () => {
+  describe('User State', () => {
+    beforeEach(() => {
+      setUser(null, null);
+    });
+
+    it('should initialize with default values', () => {
+      expect(user.value.userId.value).toBe(null);
+      expect(user.value.userName.value).toBe(null);
+    });
+
+    it('should set userId and userName correctly', () => {
+      setUser('12345', 'John Doe');
+      expect(user.value.userId.value).toBe('12345');
+      expect(user.value.userName.value).toBe('John Doe');
+    });
   });
 
-  it('should initialize with default values', () => {
-    expect(userId.value).toBe(null);
-    expect(userName.value).toBe(null);
-    expect(score.value).toBe(0);
-    expect(price.value).toBe(0);
-    expect(activeGuess.value).toBe(null);
+  describe('Score State', () => {
+    beforeEach(() => {
+      setScore(0);
+    });
+
+    it('should initialize with default value', () => {
+      expect(score.value.score.value).toBe(0);
+    });
+
+    it('should set score correctly', () => {
+      setScore(10);
+      expect(score.value.score.value).toBe(10);
+    });
   });
 
-  it('should set userId correctly', () => {
-    setUserId('12345');
-    expect(userId.value).toBe('12345');
+  describe('Price State', () => {
+    beforeEach(() => {
+      setPrice(0);
+    });
+
+    it('should initialize with default value', () => {
+      expect(price.value.price.value).toBe(0);
+    });
+
+    it('should set current price correctly', () => {
+      setPrice(100);
+      expect(price.value.price.value).toBe(100);
+    });
   });
 
-  it('should set userName correctly', () => {
-    setUserName('John Doe');
-    expect(userName.value).toBe('John Doe');
-  });
+  describe('Guess State', () => {
+    beforeEach(() => {
+      setActiveGuess('', '', 0, null, 0);
+    });
 
-  it('should set score correctly', () => {
-    setScore(10);
-    expect(score.value).toBe(10);
-  });
+    it('should initialize with default values', () => {
+      expect(guess.value.guessId.value).toBe('');
+      expect(guess.value.userId.value).toBe('');
+      expect(guess.value.timestamp.value).toBe(0);
+      expect(guess.value.direction.value).toBe(null);
+      expect(guess.value.price.value).toBe(0);
+    });
 
-  it('should set current price correctly', () => {
-    setCurrentPrice(100);
-    expect(price.value).toBe(100);
-  });
+    it('should set active guess correctly', () => {
+      setActiveGuess('abc123', 'user123', Date.now(), DIRECTION.UP, 5000);
+      expect(guess.value.guessId.value).toBe('abc123');
+      expect(guess.value.userId.value).toBe('user123');
+      expect(guess.value.direction.value).toBe(DIRECTION.UP);
+      expect(guess.value.price.value).toBe(5000);
+    });
 
-  it('should set active guess correctly', () => {
-    const mockGuess: ActiveGuess = {
-      guessId: 'abc123',
-      userId: 'user123',
-      timestamp: Date.now(),
-      direction: DIRECTION.UP,
-      price: 5000,
-    };
-    setActiveGuess(mockGuess);
-    expect(activeGuess.value).toEqual(mockGuess);
-  });
-
-  it('should reset active guess correctly', () => {
-    setActiveGuess(null);
-    expect(activeGuess.value).toBe(null);
+    it('should reset active guess correctly', () => {
+      setActiveGuess('', '', 0, null, 0);
+      expect(guess.value.guessId.value).toBe('');
+      expect(guess.value.userId.value).toBe('');
+      expect(guess.value.timestamp.value).toBe(0);
+      expect(guess.value.direction.value).toBe(null);
+      expect(guess.value.price.value).toBe(0);
+    });
   });
 });

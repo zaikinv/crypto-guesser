@@ -3,7 +3,7 @@ import {
   redirect,
   RouterProvider,
 } from 'react-router-dom';
-import { setScore, setUserId, setUserName, setActiveGuess } from '../store';
+import { setScore, setActiveGuess, setUser } from '../store';
 import { getScore, getActiveGuess } from '../api';
 import { Error } from '../components/error';
 
@@ -52,10 +52,13 @@ export const App = () => {
             setScore(score);
 
             const activeGuess = await getActiveGuess();
-            setActiveGuess(activeGuess);
 
-            setUserId(userId);
-            setUserName(name);
+            if (activeGuess) {
+              const { guessId, timestamp, direction, price } = activeGuess;
+              setActiveGuess(guessId, userId, timestamp, direction, price);
+            }
+
+            setUser(userId, name);
 
             return null;
           }

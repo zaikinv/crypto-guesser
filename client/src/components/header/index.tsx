@@ -1,4 +1,4 @@
-import { userName, score } from '../../store';
+import { user, score as activeScore } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import './style.scss';
 import { logout } from '../../services/user';
@@ -19,12 +19,12 @@ export const Header = () => {
       </div>
       <div className="header-right">
         <p>
-          Welcome, <span className="strong">{userName.value}</span>!
+          Welcome, <span className="strong">{user.value.userName.value}</span>!
         </p>
         <p>
           Score:{' '}
           <span className="strong" data-testid="user-score">
-            {score.value}
+            {activeScore.value.score.value}
           </span>
         </p>
         <button className="logout-button" onClick={handleLogout}>
@@ -32,7 +32,7 @@ export const Header = () => {
         </button>
       </div>
       <div className="header-right--mobile">
-        <span className="score--mobile">{score.value}</span>
+        <span className="score--mobile">{activeScore.value.score.value}</span>
         <button className="logout-button" onClick={handleLogout}>
           <svg
             fill="none"

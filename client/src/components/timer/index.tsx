@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import './style.scss';
 import { appConfig } from '../../config';
-import { activeGuess } from '../../store';
+import { guess } from '../../store';
 
 interface TimerProps {
   onComplete: () => void;
@@ -13,10 +13,10 @@ export const Timer: FC<TimerProps> = ({ onComplete }) => {
 
   useEffect(() => {
     const currentTime = Date.now();
-    const initialTimeLeft = activeGuess?.value?.timestamp
+    const initialTimeLeft = guess?.value?.timestamp.value
       ? Math.max(
           appConfig.guessTimeout -
-            Math.floor((currentTime - activeGuess.value.timestamp) / 1000),
+            Math.floor((currentTime - guess.value.timestamp.value) / 1000),
           0,
         )
       : appConfig.guessTimeout;
