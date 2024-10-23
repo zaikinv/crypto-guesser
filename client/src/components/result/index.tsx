@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import JSConfetti from 'js-confetti';
-import { GuessValidationResult } from '../../types';
+import type { GuessValidationResult } from '../../types';
 import './style.scss';
 
 interface ResultProps {
@@ -17,6 +17,7 @@ export const Result: FC<ResultProps> = ({ result, onClose }) => {
 
   useEffect(() => {
     if (result.isCorrectGuess) {
+      // some fancy confetti :-)
       const jsConfetti = new JSConfetti();
       jsConfetti.addConfetti({
         emojis: ['🪙'],

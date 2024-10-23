@@ -21,7 +21,10 @@ export const Game: FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // check if current user has an active guess
+    // (preloaded, see `/game` route loader)
     const activeGuessId = activeGuess?.value?.guessId?.value;
+
     if (activeGuessId) {
       setGuessId(activeGuessId);
       setShowTimer(true);
@@ -41,6 +44,8 @@ export const Game: FC = () => {
     try {
       const { guessId } = await submitGuess(
         guess,
+        // to ensure fairness, the price that is visible
+        // to the user at the current moment is submitted
         currentPrice.value.price.value!,
       );
       setGuessId(guessId);

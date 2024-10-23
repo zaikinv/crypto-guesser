@@ -2,8 +2,8 @@ import { FC, useEffect, useState } from 'react';
 import { price as currentPrice, setPrice } from '../../store';
 import { fetchPrice } from '../../api';
 import { appConfig } from '../../config';
-import './style.scss';
 import { Error as ErrorModal } from '../error';
+import './style.scss';
 
 export const Price: FC = () => {
   const priceChangeTimeout = appConfig.priceChangeTimeout / 1000;

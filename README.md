@@ -30,6 +30,16 @@ The user is interacting with React frontend that sends and receives data via RES
 
 ![](./assets/arch.png)
 
+### Folder structure
+
+```
+.
+├── .github/      Deploy action
+├── assets/       Images for README
+├── client/       React frontned
+└── server/       Nest backend
+```
+
 ## Prerequisites
 
 ### Needed tools

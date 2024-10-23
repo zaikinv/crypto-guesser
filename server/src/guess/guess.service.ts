@@ -105,6 +105,8 @@ export class GuessService {
     price: number,
     guess: string,
   ): boolean {
+    // logic here: the price is neither up nor down, but the guess IS up or down -> incorrect
+    // this is questionable and should be discussed with the product owner
     if (currentPrice === price) return false;
     const priceWentUp = currentPrice > price;
     return (

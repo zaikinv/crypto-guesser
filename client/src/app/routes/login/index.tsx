@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style.scss';
 import { login } from '../../../services/user';
 import logo from '../../../assets/logo.png';
+import './style.scss';
 
 export const Login = () => {
   const [name, setName] = useState('');
@@ -16,12 +16,18 @@ export const Login = () => {
         await login(trimmedName);
         navigate('/game');
       } catch (error: unknown) {
-        if (error instanceof Error) {
-          setError(`Cannot login. Reason: ${error.message}`);
-        } else {
-          setError('Cannot login. Unknown error occurred.');
-        }
+        setError(
+          error instanceof Error
+            ? `Cannot login. Reason: ${error.message}`
+            : 'Cannot login. Unknown error occurred.',
+        );
       }
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleLogin();
     }
   };
 
@@ -34,6 +40,7 @@ export const Login = () => {
           placeholder="Enter your name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          onKeyDown={handleKeyDown}
           className="login-input"
         />
         {error && <p className="error-message">{error}</p>}

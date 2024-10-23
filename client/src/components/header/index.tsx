@@ -34,6 +34,7 @@ export const Header = () => {
       <div className="header-right--mobile">
         <span className="score--mobile">{activeScore.value.score.value}</span>
         <button className="logout-button" onClick={handleLogout}>
+          {/* Free icon is taken from svgrepo.com */}
           <svg
             fill="none"
             height="24"
