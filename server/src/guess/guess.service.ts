@@ -22,15 +22,18 @@ export class GuessService {
     const activeGuess = await this.guessRepository.getActiveGuess(userId);
 
     if (activeGuess) {
-      const timeElapsed = Date.now() - activeGuess.timestamp;
-      if (timeElapsed > appConfig.guessTimeout) {
-        // when submitting a new guess after the timeout, delete the old guess
-        await this.guessRepository.deleteGuess(userId);
+      if (Date.now() - activeGuess.timestamp < appConfig.guessTimeout * 1000) {
+        throw new HttpException(
+          {
+            message: 'Wait for more time before submitting the next guess.',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
       } else {
         throw new HttpException(
           {
-            message: 'Guess already submitted',
-            timestamp: activeGuess.timestamp,
+            message:
+              'You already have an active guess. Resolve it before submitting a new guess.',
           },
           HttpStatus.BAD_REQUEST,
         );
@@ -53,7 +56,12 @@ export class GuessService {
   async validateGuess(guessId: string): Promise<any> {
     const guess = await this.guessRepository.getGuess(guessId);
     if (!guess) {
-      return { message: 'No guess with given ID found' };
+      throw new HttpException(
+        {
+          message: 'No guess with given ID found.',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     return await this.resolveGuess(guess);
@@ -80,7 +88,9 @@ export class GuessService {
 
     if (Date.now() - timestamp < appConfig.guessTimeout * 1000) {
       throw new HttpException(
-        'Wait for more time before resolving the guess',
+        {
+          message: 'Wait for more time before resolving the guess.',
+        },
         HttpStatus.BAD_REQUEST,
       );
     }

@@ -94,37 +94,12 @@ describe('GuessService', () => {
       ).rejects.toThrow(
         new HttpException(
           {
-            message: 'Guess already submitted',
+            message: 'Wait for more time before submitting the next guess.',
             timestamp: activeGuess.timestamp,
           },
           HttpStatus.BAD_REQUEST,
         ),
       );
-    });
-
-    it('should delete an expired active guess and allow a new guess', async () => {
-      const userId = 'testUser';
-      const direction = DIRECTION.UP;
-      const price = 10000;
-      const activeGuess = {
-        guessId: 'activeGuessId',
-        userId,
-        direction,
-        price,
-        timestamp: Date.now() - 5000,
-      };
-
-      (guessRepository.getActiveGuess as jest.Mock).mockResolvedValue(
-        activeGuess,
-      );
-      (guessRepository.deleteGuess as jest.Mock).mockResolvedValue(undefined);
-      (guessRepository.createGuess as jest.Mock).mockResolvedValue(undefined);
-
-      const result = await guessService.submitGuess(userId, direction, price);
-
-      expect(guessRepository.deleteGuess).toHaveBeenCalledWith(userId);
-      expect(guessRepository.createGuess).toHaveBeenCalled();
-      expect(result).toHaveProperty('message', 'Guess submitted');
     });
   });
 
@@ -134,9 +109,14 @@ describe('GuessService', () => {
 
       (guessRepository.getGuess as jest.Mock).mockResolvedValue(null);
 
-      const result = await guessService.validateGuess(guessId);
-
-      expect(result).toEqual({ message: 'No guess with given ID found' });
+      await expect(guessService.validateGuess(guessId)).rejects.toThrow(
+        new HttpException(
+          {
+            message: 'No guess with given ID found.',
+          },
+          HttpStatus.BAD_REQUEST,
+        ),
+      );
     });
 
     it('should resolve the guess if it exists', async () => {
